@@ -1,6 +1,11 @@
+using Core.API.Service;
+using Core.API.Service.Interface;
 using DataLayer.API.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +19,89 @@ builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<Use
 
 #endregion
 
+#region Api Version Config
+
+builder.Services.AddApiVersioning(option =>
+{
+    option.DefaultApiVersion = new ApiVersion(1, 0);
+    option.AssumeDefaultVersionWhenUnspecified = true;
+    option.ReportApiVersions = true;
+    option.ApiVersionReader = ApiVersionReader.Combine
+    (
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("x-api-version"),
+        new UrlSegmentApiVersionReader()
+    );
+});
+
+#endregion
+
+#region Add Rate Limiter
+
+builder.Services.AddRateLimiter(options =>
+{
+    #region LoginRegisterPolicy
+    /*
+    AddPolicy for user who wants to register or login (without jwt token)
+    Set 6 api per min and 1 QueueLimit
+    Get partitionKey => RemoteIpAddress :)
+    */
+
+    options.AddPolicy("LoginRegisterPolicy", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "Login Anonymous",
+            factory: key => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 6,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 1,
+            }));
+
+    #endregion
+
+    #region AuthenticatePolicy
+
+    /*AddPolicy for user who logining in account and wnats send api :)
+     Set 10 api per sec and 3 QueueLimiti
+     Get partitionKey => from Identity.Name
+     */
+
+    options.AddPolicy("AuthenticatePolicy", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.User.Identity.Name ?? "unknow",
+            factory: key => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromSeconds(10),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 3
+            }));
+
+    #endregion
+
+    #region Add Custom Error
+
+    options.OnRejected = async (context, CancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = 429;
+
+        await context.HttpContext.Response.WriteAsync("You have reach the maximum number of sending api, please wait and try again later");
+    };
+
+    #endregion
+});
+
+#endregion
+
+#region IOC (InVersion Of Controlle)
+
+builder.Services.AddTransient<IUserServiceAsync, UserServiceAsync>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+#endregion
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -30,9 +115,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+app.UseRateLimiter();
+
 
 app.Run();
