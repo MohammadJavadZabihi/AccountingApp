@@ -112,5 +112,23 @@ namespace AccountingApp.API.Controllers
 
         #endregion
 
+        #region Login User
+
+        [HttpPost("Login")]
+        [EnableRateLimiting("LoginRegisterPolicy")]
+        public async Task<IActionResult> Login(LoginUserDTO loginUserDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var loginStatuce = await _userServiceAsync.LoginUser(loginUserDTO);
+
+            if(loginStatuce.IsSuccess)
+                return Ok(loginStatuce);
+
+            return BadRequest(loginStatuce);
+        }
+
+        #endregion
     }
 }

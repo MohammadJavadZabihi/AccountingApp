@@ -1,10 +1,13 @@
 using Core.API.Service;
 using Core.API.Service.Interface;
 using DataLayer.API.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,7 +75,7 @@ builder.Services.AddRateLimiter(options =>
             partitionKey: context.User.Identity.Name ?? "unknow",
             factory: key => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = 10,
+                PermitLimit = 8,
                 Window = TimeSpan.FromSeconds(10),
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                 QueueLimit = 3
@@ -94,10 +97,37 @@ builder.Services.AddRateLimiter(options =>
 
 #endregion
 
+#region Add JWT Configuration
+
+var jwtSetting = builder.Configuration.GetSection("jwt");
+var key = Encoding.ASCII.GetBytes(jwtSetting["key"]);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSetting["Issuer"],
+        ValidAudience = jwtSetting["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+    };
+});
+
+#endregion
+
 #region IOC (InVersion Of Controlle)
 
 builder.Services.AddTransient<IUserServiceAsync, UserServiceAsync>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 
 #endregion
 
@@ -115,6 +145,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseRateLimiter();
