@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingApp.API", "AccountingApp\AccountingApp.API.csproj", "{7B96D19F-F08C-4C61-B670-4A763E5E67D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer.API", "DataLayer\DataLayer.API.csproj", "{DAD4349A-95D1-4169-9637-E158DE6D6C15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.API", "Core.API\Core.API.csproj", "{823C08C0-6D91-4C86-A73F-1FE4E100E25C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccounitngApp.Windows", "AccounitngApp.Windows\AccounitngApp.Windows.csproj", "{9DE36E35-F64A-43CE-B899-BBD22DE5DF00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{823C08C0-6D91-4C86-A73F-1FE4E100E25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{823C08C0-6D91-4C86-A73F-1FE4E100E25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{823C08C0-6D91-4C86-A73F-1FE4E100E25C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DE36E35-F64A-43CE-B899-BBD22DE5DF00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE36E35-F64A-43CE-B899-BBD22DE5DF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE36E35-F64A-43CE-B899-BBD22DE5DF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE36E35-F64A-43CE-B899-BBD22DE5DF00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,47 @@
+﻿<Window x:Class="AccounitngApp.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AccounitngApp.Windows"
+        mc:Ignorable="d"
+        Title="Login" Height="480" Width="800" Background="Transparent" AllowsTransparency="True" WindowStyle="None"  WindowStartupLocation="CenterScreen">
+    <Border CornerRadius="15" Background="{StaticResource BackgroundBrush}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="7*"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="loginHeader" CornerRadius="15 15 0 0" Background="{StaticResource HeaderBrush}">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btnExite" Style="{StaticResource btnExite}" Content="X" Margin="20 0 0 0"/>
+
+                        <Button x:Name="btnMinize" Style="{StaticResource headerButton}" Content="-" Margin="5 0 0 0"/>
+
+                        <Button x:Name="btnFullScreen" Style="{StaticResource headerButton}" Content="[ ]" Margin="5 0 0 0" FontSize="15"/>
+
+                    </StackPanel>
+                    
+                    <TextBlock Grid.Column="1" Text="حسابداری ماهان" Style="{StaticResource textStyle}" Margin="0 15 20 0"  FontSize="20"/>
+
+                </Grid>
+                
+            </Border>
+
+            <StackPanel Grid.Row="1">
+                <TextBox />
+                <TextBox/>
+            </StackPanel>
+
+        </Grid>
+        
+    </Border>
+</Window>

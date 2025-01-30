@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AccountingApp.Windows (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "AccountingApp.Windows (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
