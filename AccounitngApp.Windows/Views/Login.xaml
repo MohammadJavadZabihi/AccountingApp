@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AccounitngApp.Windows"
         mc:Ignorable="d"
-        Title="Login" Height="480" Width="800" Background="Transparent" AllowsTransparency="True" WindowStyle="None"  WindowStartupLocation="CenterScreen">
+        Title="Login" Height="480" Width="700" Background="Transparent" AllowsTransparency="True" WindowStyle="None"  WindowStartupLocation="CenterScreen">
     <Border CornerRadius="15" Background="{StaticResource BackgroundBrush}">
 
         <Grid>
@@ -22,9 +22,9 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btnExite" Style="{StaticResource btnExite}" Content="X" Margin="20 0 0 0"/>
+                        <Button x:Name="btnExite" Style="{StaticResource btnExite}" Content="X" Margin="20 0 0 0" Click="btnExite_Click"/>
 
-                        <Button x:Name="btnMinize" Style="{StaticResource headerButton}" Content="-" Margin="5 0 0 0"/>
+                        <Button x:Name="btnMinize" Style="{StaticResource headerButton}" Content="-" Margin="5 0 0 0" Click="btnMinize_Click"/>
 
                         <Button x:Name="btnFullScreen" Style="{StaticResource headerButton}" Content="[ ]" Margin="5 0 0 0" FontSize="15"/>
 
@@ -36,9 +36,14 @@
                 
             </Border>
 
-            <StackPanel Grid.Row="1">
-                <TextBox />
-                <TextBox/>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="خوش آمدید" Style="{StaticResource textStyle}" HorizontalAlignment="Center" FontSize="30" Margin="0 0 0 20"/>
+                
+                <TextBox Template="{StaticResource TextBoxTemplate}" Width="330" Height="40" Margin="0 0 0 30"/>
+                
+                <PasswordBox Template="{StaticResource PasswordboxTempalte}" Width="330" Height="40"/>
+
+                <Button Style="{StaticResource btnLogin}" Margin="0 30 0 0" Background="{StaticResource btnBrush}" Foreground="{StaticResource foregraoundBrush}" Content="ورود"/>
             </StackPanel>
 
         </Grid>

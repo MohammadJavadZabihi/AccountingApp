@@ -3,8 +3,12 @@
 
     <Color x:Key="BackgroundColor">#ffffff</Color>
     <Color x:Key="HeaderColor">#f3f3f3</Color>
+    <Color x:Key="btnColor">#48A6A7</Color>
+    <Color x:Key="foregraoundColor">#1e1e1e</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
     <SolidColorBrush x:Key="HeaderBrush" Color="{StaticResource HeaderColor}"/>
+    <SolidColorBrush x:Key="btnBrush" Color="{StaticResource btnColor}"/>
+    <SolidColorBrush x:Key="foregraoundBrush" Color="{StaticResource foregraoundColor}"/>
 
 </ResourceDictionary>
